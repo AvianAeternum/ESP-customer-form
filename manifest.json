@@ -2,7 +2,7 @@
   "name": "Customer Form",
   "short_name": "Customer Form",
   "description": "A form for formatting customer data",
-  "start_url": "/index.html",
+  "start_url": "/ESP-customer-form/index.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#007bff",
