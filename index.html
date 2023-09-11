@@ -183,7 +183,18 @@
             document.getElementById("referral-details").value = '';  // Clear the input if not displayed
         }
     });
-
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').then(
+                (registration) => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                },
+                (err) => {
+                    console.log('Service Worker registration failed:', err);
+                }
+            );
+        });
+    }
     function generateOutput() {
         const form = document.getElementById("customer-form");
         const formData = new FormData(form);
@@ -253,18 +264,6 @@
         document.execCommand('copy'); //copy to clipboard
         window.getSelection().removeAllRanges(); // deselect everything
         alert('Copied to Clipboard!'); // optional: show a notification that it was copied
-    }
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').then(
-                (registration) => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                },
-                (err) => {
-                    console.log('Service Worker registration failed:', err);
-                }
-            );
-        });
     }
 </script>
 </body>
