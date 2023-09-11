@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Information Form</title>
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea,
+        input[type="date"] {
+            width: 100%; /* Updated from calc(100% - 20px) */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+
+
+        select {
+            height: 40px;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-label {
+            margin-right: 10px;
+        }
+
+        .btn-generate {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Style for the non-editable text box */
+        #output-box {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Customer Information Form</h2>
+    <form action="#" method="post" id="customer-form">
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first-name" required>
+        </div>
+        <div class="form-group">
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" name="last-name" required>
+        </div>
+        <div class="form-group">
+            <label for="street-address">Street Address:</label>
+            <input type="text" id="street-address" name="street-address" required>
+        </div>
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+        </div>
+        <div class="form-group">
+            <label for="zip-code">Zip Code:</label>
+            <input type="text" id="zip-code" name="zip-code" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label>Was deposit taken?</label>
+            <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="deposit-taken" value="Yes" required>Yes</label>
+                <label class="radio-label"><input type="radio" name="deposit-taken" value="No">No</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="lead-source">Lead Source:</label>
+            <select id="lead-source" name="lead-source" required>
+                <option value="Angie">Angie</option>
+                <option value="365 Pronto">365 Pronto</option>
+                <option value="ESP Website">ESP Website Lead</option>
+                <option value="Direct Call">Direct Called In</option>
+                <option value="Referral">Referred</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group" id="referral-details-group" style="display: none;">
+            <label for="referral-details">Referral/Other Details:</label>
+            <input type="text" id="referral-details" name="referral-details">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="quoted-prices">Quoted Prices:</label>
+            <input type="text" id="quoted-prices" name="quoted-prices">
+        </div>
+        <div class="form-group">
+            <label for="outcome">Outcome:</label>
+            <input type="text" id="outcome" name="outcome">
+        </div>
+        <span id="error-message" style="color:red;"></span>
+        <div class="form-group">
+            <button type="button" class="btn-generate" onclick="generateOutput()">Generate</button>
+        </div>
+    </form>
+
+    <!-- Non-editable text box for displaying collected information -->
+    <textarea id="output-box" readonly></textarea>
+
+
+</div>
+
+<script>
+    document.getElementById("lead-source").addEventListener("change", function() {
+        const leadSource = this.value;
+
+        if (leadSource === "Referral" || leadSource === "Other") {
+            document.getElementById("referral-details-group").style.display = "block";
+        } else {
+            document.getElementById("referral-details-group").style.display = "none";
+            document.getElementById("referral-details").value = '';  // Clear the input if not displayed
+        }
+    });
+
+    function generateOutput() {
+        const form = document.getElementById("customer-form");
+        const formData = new FormData(form);
+        let outputText = "";
+
+        // Combine first name and last name into one "Name" field
+        const firstName = formData.get("first-name");
+        const lastName = formData.get("last-name");
+        const name = `${firstName} ${lastName}`;
+
+        // Combine street address, city, state, and zip into one address line
+        const streetAddress = formData.get("street-address");
+        const city = formData.get("city");
+        const zipCode = formData.get("zip-code");
+        const address = `${streetAddress}, ${city}, Arizona ${zipCode}`;
+
+        for (const [key, value] of formData.entries()) {
+            if (key === "first-name" || key === "last-name" || key === "street-address" || key === "city" || key === "zip-code") {
+                continue; // Skip individual name and address components
+            }
+
+            // Check if the value is empty and replace it with the ❓ emoji
+            outputText += `${key}: ${value || "❓"}\n`;
+        }
+
+        // Add the combined name and address to the output
+        outputText = `Name: ${name || "❓"}\n` + `Address: ${address || "❓"}\n` + outputText;
+
+        const outputBox = document.getElementById("output-box");
+
+        outputBox.value = outputText;
+        outputBox.addEventListener('click', function() {
+            copyToClipboard('output-box');
+        });
+
+
+    }
+    document.getElementById('customer-form').addEventListener('submit', function(e) {
+        const phone = document.getElementById('phone');
+        const email = document.getElementById('email');
+        const errorMessage = document.getElementById('error-message');
+
+        // Clear previous error message
+        errorMessage.textContent = '';
+
+        // Validate phone number
+        const phonePattern = /^\+?\d{0,3}?[- .]?\(?(?:\d{2,3})\)?[- .]?\d\d\d[- .]?\d\d\d\d$/;
+        if (!phonePattern.test(phone.value)) {
+            e.preventDefault();
+            errorMessage.textContent = 'Please enter a valid phone number.';
+            phone.focus();
+            return;
+        }
+
+        // Validate email
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(email.value)) {
+            e.preventDefault();
+            errorMessage.textContent = 'Please enter a valid email address.';
+            email.focus();
+            return;
+        }
+    });
+    function copyToClipboard(elementId) {
+        let element = document.getElementById(elementId); //get the text area
+        element.select(); // select the text
+        document.execCommand('copy'); //copy to clipboard
+        window.getSelection().removeAllRanges(); // deselect everything
+        alert('Copied to Clipboard!'); // optional: show a notification that it was copied
+    }
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').then(
+                (registration) => {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                },
+                (err) => {
+                    console.log('Service Worker registration failed:', err);
+                }
+            );
+        });
+    }
+</script>
+</body>
+</html>
