@@ -2,10 +2,11 @@
   "name": "Customer Form",
   "short_name": "Customer Form",
   "description": "A form for formatting customer data",
-  "start_url": "/",
+  "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "orientation": "portrait",
+  "background_color": "#007bff",
+  "theme_color": "#007bff",
   "icons": [
     {
       "src": "assets/icon_small.png",
