@@ -2,7 +2,7 @@
   "name": "Customer Form",
   "short_name": "Customer Form",
   "description": "A form for formatting customer data",
-  "start_url": "/",
+  "start_url": "https://avianaeternum.github.io/ESP-customer-form/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
