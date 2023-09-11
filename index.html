@@ -3,12 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="application-name" content="Customer Form" />
-    <meta name="apple-mobile-web-app-title" content="Customer Form" />
-    <meta name="msapplication-starturl" content="/index.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Customer Information Form</title>
     <link rel="manifest" href="/manifest.json">
     <style>
@@ -256,19 +250,11 @@
     function copyToClipboard(elementId) {
         let element = document.getElementById(elementId); //get the text area
         element.select(); // select the text
-        navigator.permissions.query({name: "clipboard-write"}).then(result => {
-            if (result.state === "granted" || result.state === "prompt") {
-                navigator.clipboard.writeText('Text to copy').then(() => {
-                    console.log('Text is copied to the clipboard.');
-                });
-            }
+        navigator.clipboard.writeText('Text to copy').then(() => {
+            console.log('Text is copied to the clipboard.');
+        }).catch(err => {
+            console.log('Failed to copy text: ', err);
         });
-
-        // navigator.clipboard.writeText('Text to copy').then(() => {
-        //     console.log('Text is copied to the clipboard.');
-        // }).catch(err => {
-        //     console.log('Failed to copy text: ', err);
-        // });
         window.getSelection().removeAllRanges(); // deselect everything
         alert('Copied to Clipboard!'); // optional: show a notification that it was copied
     }
