@@ -250,11 +250,19 @@
     function copyToClipboard(elementId) {
         let element = document.getElementById(elementId); //get the text area
         element.select(); // select the text
-        navigator.clipboard.writeText('Text to copy').then(() => {
-            console.log('Text is copied to the clipboard.');
-        }).catch(err => {
-            console.log('Failed to copy text: ', err);
+        navigator.permissions.query({name: "clipboard-write"}).then(result => {
+            if (result.state === "granted" || result.state === "prompt") {
+                navigator.clipboard.writeText('Text to copy').then(() => {
+                    console.log('Text is copied to the clipboard.');
+                });
+            }
         });
+
+        // navigator.clipboard.writeText('Text to copy').then(() => {
+        //     console.log('Text is copied to the clipboard.');
+        // }).catch(err => {
+        //     console.log('Failed to copy text: ', err);
+        // });
         window.getSelection().removeAllRanges(); // deselect everything
         alert('Copied to Clipboard!'); // optional: show a notification that it was copied
     }
